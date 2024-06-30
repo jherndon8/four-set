@@ -28,7 +28,7 @@
 		padding-left: 3%;
 		}
 		button {
-		margin:auto;
+		margin: 20px auto;
 		display:block;
 		}
 		p {margin:auto;}
@@ -48,6 +48,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 	<br>
 	<br>
 	<button onclick="userCheckSet()">Check if set</button>
+	<button onclick="userAddRow()">Add row if no solution</button>
 	<button onclick="userShowAnswer()">Show answer</button>
 	<div id="status"></div>
     <script>
@@ -95,7 +96,13 @@ let shuffledArray = generateShuffledArray();
             for (let i = 0; i < 4; i++) {
 				const row = document.createElement('div');
 				container.appendChild(row)
-				for (let j = 0; j < 3; j++) {
+				addRow(row)
+            }
+			
+        }
+		
+		function addRow(row) {
+			for (let j = 0; j < 3; j++) {
 					const num = shuffledArray.pop()
 					const cardContent = generateCardContent(num);
 					const card = document.createElement('div');
@@ -107,9 +114,7 @@ let shuffledArray = generateShuffledArray();
 					event.currentTarget.classList.toggle('selected')
 					});
 				}
-            }
-			
-        }
+		}
 		
 		function getCards() {
 			return Array.from(document.getElementsByClassName('card'))
@@ -170,12 +175,24 @@ let shuffledArray = generateShuffledArray();
 			document.getElementById('status').innerHTML = solve()
 		}
 		
+		function userAddRow() {
+			if (solve().length) {
+				document.getElementById('status').innerHTML = 'A set exists'
+				return;
+			}
+            const container = document.getElementById('cards-container');
+			const row = document.createElement('div');
+				container.appendChild(row);
+				addRow(row);
+		}
+		
 		function solve() {
-			nums = getNumbers()
+			const nums = getNumbers()
+			const len = nums.length
 			solutions = []
-			for (var i = 0; i < 10; i++) {
-				for (var j = i+1; j < 11; j++) {
-					for (var k = j+1; k < 12; k++) {
+			for (var i = 3; i < nums.length - 2; i++) {
+				for (var j = i+1; j < nums.length - 1; j++) {
+					for (var k = j+1; k < nums.length; k++) {
 						const answer = nums[i] ^ nums[j] ^ nums[k]
 						const ind = nums.indexOf(answer)
 						if (nums.indexOf(answer) > k) {
