@@ -48,6 +48,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 	<br>
 	<br>
 	<button onclick="userCheckSet()">Check if set</button>
+	<button onclick="userShowAnswer()">Show answer</button>
 	<div id="status"></div>
     <script>
 
@@ -163,6 +164,10 @@ let shuffledArray = generateShuffledArray();
 				card.className = `card ${val}`;
 				}
 			}
+		}
+
+	        function userShowAnswer() {
+			document.getElementById('status').innerHTML = checkSet()
 		}
 		
 		function solve() {
