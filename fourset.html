@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Shape Cards</title>
+    <style>
+        .card {
+            border: 1px solid #999;
+            padding: 10px;
+            margin: 10px;
+            display: inline-table;
+            width: 200px;
+			height: 148px;
+            text-align: center;
+			background-color: #eee;
+        }
+        .shape {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+        }
+		.selected {
+			margin: 8px;
+            border: 3px solid #000;
+		}
+    </style>
+</head>
+<body>
+
+	Choose 4 such that no shape, quantity, fill color, or outline color is the odd one out
+	<br>
+	(Each attribute can be all same, all different, or 2 pairs)
+	<br>
+    <div id="cards-container"></div>
+	<button onclick="userCheckSet()">Check if set</button>
+	<div id="status"></div>
+    <script>
+
+        function generateCardContent(num) {
+            const shapes = ['circle', 'square', 'triangle', 'star'];
+            const colors = ['blue', 'green', 'red', 'yellow'];
+
+            const shape = shapes[num & 3]
+            const shapeColor = colors[(num>>2) & 3];
+            const borderColor = colors[(num>>4) & 3];
+			const shapeCount = (num>>6) & 3
+
+            const shapeImages = [];
+            for (let i = 0; i < shapeCount + 1; i++) {
+                shapeImages.push(`<img src="images/${shapeColor}_${shape}_${borderColor}.png" alt="${shape}" class="shape">`);
+            }
+
+            return shapeImages.join('');
+        }
+		
+		function shuffleArray(array) {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]]; // Swap elements
+		}
+		return array;
+	}
+
+	function generateShuffledArray() {
+		const array = [];
+		for (let i = 0; i <= 255; i++) {
+			array.push(i);
+		}
+		return shuffleArray(array);
+	}
+
+// Example usage:
+let shuffledArray = generateShuffledArray();
+
+        function generateCards() {
+		
+			shuffledArray = generateShuffledArray();
+            const container = document.getElementById('cards-container');
+			container.innerHTML = ''
+            for (let i = 0; i < 4; i++) {
+				const row = document.createElement('div');
+				container.appendChild(row)
+				for (let j = 0; j < 3; j++) {
+					const num = shuffledArray.pop()
+					const cardContent = generateCardContent(num);
+					const card = document.createElement('div');
+					card.className = `card ${num}`;
+					card.innerHTML = cardContent;
+					row.appendChild(card);
+					card.addEventListener('click', function(event) {
+					console.log(event.target, event.currentTarget);
+					event.currentTarget.classList.toggle('selected')
+					});
+				}
+            }
+			
+        }
+		
+		function getCards() {
+			return Array.from(document.getElementsByClassName('card'))
+		}
+		
+		function newCardValue(index) {
+			const val = shuffledArray.pop();
+			const card = getCards()[index];
+			card.innerHTML = generateCardContent(val);
+			card.className = `card ${val}`;
+		}
+		
+		function getNumbers() {
+			return getCards().map(card => card.classList[1] - 0)
+		}
+		
+		function checkSet() {
+			
+			const selected = Array.from(document.getElementsByClassName('selected')).map(card => card.classList[1] - 0)
+			if (selected.length != 4) {
+				return['4 not selected']
+			}
+			const answer =  selected.reduce((a, b)=>a^b, 0)
+			const errors = []
+			if (answer === 0) {
+				return []
+			}
+			if (answer & 3) {
+				errors.push('shape has an odd one out')
+			}
+			if (answer & (3<<2)) {
+				errors.push('shape color has an odd one out')
+			}
+			if (answer & (3<<4)) {
+			errors.push('border color has an odd one out')
+			}
+			if (answer & (3<<6)) {
+			errors.push('quantity has an odd one out')
+			}
+			return errors
+		}
+		
+		function userCheckSet() {
+			const result = checkSet()
+			document.getElementById('status').innerHTML = result.join("<br>")
+			if (result.length == 0) {
+				document.getElementById('status').innerHTML = 'You got a set!'
+				const selected = Array.from(document.getElementsByClassName('selected'))
+				for (card of selected) {
+				const val = shuffledArray.pop();
+				card.innerHTML = generateCardContent(val);
+				card.className = `card ${val}`;
+				}
+			}
+		}
+		
+		function solve() {
+			nums = getNumbers()
+			solutions = []
+			for (var i = 0; i < 10; i++) {
+				for (var j = i+1; j < 11; j++) {
+					for (var k = j+1; k < 12; k++) {
+						const answer = nums[i] ^ nums[j] ^ nums[k]
+						const ind = nums.indexOf(answer)
+						if (nums.indexOf(answer) > k) {
+							solutions.push([i, j, k, ind])
+						}
+					}
+				}
+			}
+			return solutions
+		}
+
+        window.onload = generateCards;
+    </script>
+</body>
+</html>
