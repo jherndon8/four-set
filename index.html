@@ -172,7 +172,7 @@ let shuffledArray = generateShuffledArray();
 		}
 
 	        function userShowAnswer() {
-			document.getElementById('status').innerHTML = solve()
+			document.getElementById('status').innerHTML = solve().map(entry => entry.map(x=>x+1)).join("<br>") || "no solution exists, add a row"
 		}
 		
 		function userAddRow() {
