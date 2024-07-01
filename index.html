@@ -110,7 +110,6 @@ let shuffledArray = generateShuffledArray();
 					card.innerHTML = cardContent;
 					row.appendChild(card);
 					card.addEventListener('click', function(event) {
-					console.log(event.target, event.currentTarget);
 					event.currentTarget.classList.toggle('selected')
 					});
 				}
