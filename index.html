@@ -40,7 +40,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 </head>
 <body>
 
-	<p>Choose 4 such that no shape, quantity, fill color, or outline color is the odd one out
+	<p>Choose 4 such that no shape, quantity, inside color, or border color is the odd one out
 	<br>
 	(Each attribute can be all same, all different, or 2 pairs)
 	<br></p>
@@ -140,7 +140,7 @@ let shuffledArray = generateShuffledArray();
 				errors.push('shape has an odd one out')
 			}
 			if (answer & (3<<2)) {
-				errors.push('shape color has an odd one out')
+				errors.push('inside color has an odd one out')
 			}
 			if (answer & (3<<4)) {
 			errors.push('border color has an odd one out')
