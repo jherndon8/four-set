@@ -154,13 +154,13 @@ let shuffledArray = generateShuffledArray();
 			if (answer & 3) {
 				errors.push('shape has an odd one out')
 			}
-			if (answer & (3<<4)) {
+			if (answer & (3<<2)) {
 				errors.push('shape color has an odd one out')
 			}
-			if (answer & (3<<6)) {
+			if (isHardMode() && (answer & (3<<6))) {
 			errors.push('border color has an odd one out')
 			}
-			if (answer & (3<< 2)) {
+			if (answer & (3<< 4)) {
 			errors.push('quantity has an odd one out')
 			}
 			return errors
