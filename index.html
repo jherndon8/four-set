@@ -45,10 +45,15 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 	<br>
 	(Each attribute can be all same, all different, or 2 pairs)
 	<br></p>
-	 <input type="checkbox" id="hardMode" onchange="generateCards()"></input> Hard mode?
+	<label for="cars">Choose difficulty:</label>
+<select onchange="generateCards()" name="difficulty" id="difficulty">
+	<option value="32">Basic</option>
+    <option selected="selected" value="64">Standard</option>
+    <option value="128">Hard</option>
+    <option value="256">Expert</option>
+</select>
 	<br>
     <div id="cards-container"></div>
-	<br>
 	<br>
 	<button onclick="userCheckSet()">Check if set</button>
 	<button onclick="userAddRow()">Add row if no solution</button>
@@ -62,7 +67,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
             const shape = shapes[num & 3]
             const shapeColor = colors[(num>>2) & 3];
-            const borderColor = colors[(num>>(isHardMode() ? 6:2)) & 3];
+            const borderColor = colors[((num>> 6)^(num>>2)) & 3];
 			const shapeCount = (num>>4) & 3
 
             const shapeImages = [];
@@ -80,10 +85,13 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 		}
 		return array;
 	}
+	    function getDeckSize() {
+		    return document.getElementById("difficulty").value - 0
+	    }
 
 	function generateShuffledArray() {
 		const array = [];
-		for (let i = 0; i < (isHardMode() ? 256 : 64); i++) {
+		for (let i = 0; i < (getDeckSize()); i++) {
 			array.push(i);
 		}
 		return shuffleArray(array);
@@ -157,7 +165,7 @@ let shuffledArray = generateShuffledArray();
 			if (answer & (3<<2)) {
 				errors.push('shape color has an odd one out')
 			}
-			if (isHardMode() && (answer & (3<<6))) {
+			if ((answer & (3<<6))) {
 			errors.push('border color has an odd one out')
 			}
 			if (answer & (3<< 4)) {
