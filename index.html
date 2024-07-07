@@ -14,6 +14,13 @@
             text-align: center;
 			background-color: #ddd;
         }
+	#buttons {
+		width: 50%;
+		float: left;
+	}
+	#status {
+		margin-left: 50%;
+	}
         .shape {
             width: 40%;
             margin: 2px;
@@ -54,12 +61,13 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 </select>
 	<br>
     <div id="cards-container"></div>
-	<hr>
+	<br>
+	<div id="buttons">
+	    <button onclick="userCheckSet()">Check if set</button>
+	    <button onclick="userAddRow()">Add row if no solution</button>
+	    <button onclick="userShowAnswer()">Show answer</button>
+	</div>
 	<div id="status"></div>
-	<button onclick="userCheckSet()">Check if set</button>
-	<button onclick="userAddRow()">Add row if no solution</button>
-	<button onclick="userShowAnswer()">Show answer</button>
-	
     <script>
 
         function generateCardContent(num) {
